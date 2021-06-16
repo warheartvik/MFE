@@ -5,7 +5,7 @@ import App from './app'
 
 //mount function para iniciar el app
 
-const mount = (el, { onNavigate, defaultHistory, initialPath }) => {
+const mount = (el, { onSignIn, onNavigate, defaultHistory, initialPath }) => {
     const history = defaultHistory || createMemoryHistory({
         initialEntries: [initialPath]
     })
@@ -14,7 +14,7 @@ const mount = (el, { onNavigate, defaultHistory, initialPath }) => {
     }
 
     ReactDom.render(
-        <App history={history} />,
+        <App onSignIn={onSignIn} history={history} />,
         el
     );
 
@@ -31,7 +31,7 @@ const mount = (el, { onNavigate, defaultHistory, initialPath }) => {
 //si estamos en modo desarrollo iniciar mount de una
 
 if (process.env.NODE_ENV === 'development') {
-    const devRoot = document.querySelector('#marketing-dev-root')
+    const devRoot = document.querySelector('#auth-dev-root')
     if (devRoot) {
         mount(devRoot, { defaultHistory: createBrowserHistory()})
     }
