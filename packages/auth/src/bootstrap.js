@@ -1,45 +1,43 @@
-import React from 'react'
-import ReactDom from 'react-dom'
-import { createMemoryHistory, createBrowserHistory } from 'history'
-import App from './app'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { createMemoryHistory, createBrowserHistory } from 'history';
+import App from './App';
 
-//mount function para iniciar el app
-
+// Mount function to start up the app
 const mount = (el, { onSignIn, onNavigate, defaultHistory, initialPath }) => {
-    const history = defaultHistory || createMemoryHistory({
-        initialEntries: [initialPath]
-    })
-    if(onNavigate){
-        history.listen(onNavigate)
-    }
+  const history =
+    defaultHistory ||
+    createMemoryHistory({
+      initialEntries: [initialPath],
+    });
 
-    ReactDom.render(
-        <App onSignIn={onSignIn} history={history} />,
-        el
-    );
+  if (onNavigate) {
+    history.listen(onNavigate);
+  }
 
-    return {
-        onParentNavigate({pathname: nextPathName}){
-            const { pathname } = history.location
-            if(pathname !== nextPathName){
-                history.push(nextPathName)
-            }
-        }
-    }
-}
+  ReactDOM.render(<App onSignIn={onSignIn} history={history} />, el);
 
-//si estamos en modo desarrollo iniciar mount de una
+  return {
+    onParentNavigate({ pathname: nextPathname }) {
+      const { pathname } = history.location;
 
+      if (pathname !== nextPathname) {
+        history.push(nextPathname);
+      }
+    },
+  };
+};
+
+// If we are in development and in isolation,
+// call mount immediately
 if (process.env.NODE_ENV === 'development') {
-    const devRoot = document.querySelector('#auth-dev-root')
-    if (devRoot) {
-        mount(devRoot, { defaultHistory: createBrowserHistory()})
-    }
+  const devRoot = document.querySelector('#_auth-dev-root');
+
+  if (devRoot) {
+    mount(devRoot, { defaultHistory: createBrowserHistory() });
+  }
 }
 
-//asumimos que estamos iniciando desde container
-//entonces exportamos mount
-
-export {
-    mount
-}
+// We are running through container
+// and we should export the mount function
+export { mount };
